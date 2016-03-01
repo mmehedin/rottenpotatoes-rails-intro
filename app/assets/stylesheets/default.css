@@ -16,6 +16,21 @@ a {
   text-decoration: underline;
   font-weight: bold;
 }
+
+a #title_header{
+  background: transparent;
+  color: maroon;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+a #release_date_header{
+  background: transparent;
+  color: maroon;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
 h1 {
   color: maroon;
   font-size: 150%;
@@ -48,6 +63,12 @@ table#movies th, table#movies td {
   padding: 4px;
   text-align: left;
 }
+
+
+table#movies th.hilite {
+  background-color: yellow;
+}
+
 #notice #warning {
   background: rosybrown;
   margin: 1em 0;
@@ -60,7 +81,3 @@ form label {
   color: maroon;
 }
 
-
-table#movies th.hilite {
-  background-color: yellow;
-}
