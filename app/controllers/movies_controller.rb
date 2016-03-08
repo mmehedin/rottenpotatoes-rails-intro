@@ -1,18 +1,18 @@
 class MoviesController < ApplicationController
 
-  def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date)
+  def index
+    @movies = Movie.all
+    @all_ratings = ['G', 'PG', 'PG-13', 'NC-17', 'R']
   end
-
+  
+  
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
 
-  def index
-    @movies = Movie.all
-  end
+
 
   def new
     # default: render 'new' template
@@ -36,10 +36,19 @@ class MoviesController < ApplicationController
   end
 
   def destroy
+    
     @movie = Movie.find(params[:id])
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
   end
+  
+   #require 'ruby-debug'; debugger;
+  private 
+
+  def movie_params
+    params.require(:movie).permit(:title, :rating, :description, :release_date)
+  end
+
 
 end
