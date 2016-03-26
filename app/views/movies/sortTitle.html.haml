@@ -11,15 +11,14 @@
 %table#movies
   %thead
     %tr
-      %th=link_to "Movie Title", sortTitle_path
-      -#:controller => "movies", :action => "sortTitle"
+      %th.hilite=link_to "Movie Title", sortTitle_path
       -#%th sortable "Movie Title"
       %th Rating
       %th=link_to "Release Date", sortRelease_path
       %th More Info
   %tbody
-    =render :partial=>'movie', :collection=>@movies
-
+    -#=render :partial=>'movie', :collection=>@movies
+    =render :partial=>'movie', :collection=>@movies.order("title ASC")
 = link_to 'Add new movie', new_movie_path
--#= link_to 'Movie Title', movies_path
+-#= link_to 'Title', movies_title
 -#= link_to 'Release Date', sort_release_path

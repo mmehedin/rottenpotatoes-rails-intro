@@ -1,9 +1,20 @@
 Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
-
+  resources :movies
   # You can have the root of your site routed with "root"
-  root 'movies#index'
+  #root 'movies#index'
+  root :to => redirect('/movies')
+  
+  
+  #sort_title 'movies_title#index_title'
+  #sort_release 'movies_release#index_release'
+  get 'sortTitle' => 'movies#sortTitle'
+  get 'sortRelease' => 'movies#sortRelease'
+  
+  get  'auth/:provider/callback' => 'sessions#create'
+  post 'logout' => 'sessions#destroy'
+  get  'auth/failure' => 'sessions#failure'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
@@ -14,7 +25,7 @@ Rails.application.routes.draw do
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
-  resources :movies
+
   
   # Example resource route with options:
   #   resources :products do
@@ -55,4 +66,6 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+  
+  
 end
