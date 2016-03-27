@@ -1,5 +1,5 @@
 class MoviesController < ApplicationController
-
+  
   def index
     @movies = Movie.all
     #@movies.sort{ |a,b| a.title.downcase <=> b.title.downcase }
@@ -7,7 +7,16 @@ class MoviesController < ApplicationController
     @all_ratings = ['G', 'PG', 'PG-13', 'NC-17', 'R']
     
     #@all_ratings = Movie.all_ratings
-
+    
+    if (params[:curr_sort] =="title")
+      @movies = Movie.order_title
+      @title_header = 'hilite'
+    elsif (params[:curr_sort] =="release_date")
+      @movies = Movie.order_release 
+      @release_date_header = 'hilite'
+    end
+    
+=begin
     # Get the remembered settings
     if (params[:filter] == nil and params[:ratings] == nil and params[:sort] == nil and 
               (session[:filter] != nil or session[:ratings] != nil or session[:sort] != nil))
@@ -51,27 +60,33 @@ class MoviesController < ApplicationController
       end
     end
     
- 
+=end
     
   end
   
+  
   def sortTitle
-    @movies = Movie.all
+    #@movies  = Movie.find params[]
+    #@movies = Movie.all
     #@movies.sort{ |a,b| a.title.downcase <=> b.title.downcase }
     #@movies = Movie.all.order(:title)
     @all_ratings = ['G', 'PG', 'PG-13', 'NC-17', 'R']
+
     #id = params[:id] # retrieve movie ID from URI route
-    @movies = Movie.all.order(:title)
+    #@movies = Movie.all.order(:title)
+    @movies = Movie.order_title
     #redirect_to movies_path
   end
   
+  
   def sortRelease
     #id = params[:id] # retrieve movie ID from URI route
-     @movies = Movie.all
+    #@movies = Movie.all
     #@movies.sort{ |a,b| a.title.downcase <=> b.title.downcase }
     #@movies = Movie.all.order(:title)
     @all_ratings = ['G', 'PG', 'PG-13', 'NC-17', 'R']
-    @movies = Movie.all.order(:release_date)
+    #@movies = Movie.all.order(:release_date)
+    @movies = Movie.order_release
     #redirect_to movies_path
   end
   

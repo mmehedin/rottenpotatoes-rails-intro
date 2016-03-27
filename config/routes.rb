@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   
   #sort_title 'movies_title#index_title'
   #sort_release 'movies_release#index_release'
-  get 'sortTitle' => 'movies#sortTitle'
-  get 'sortRelease' => 'movies#sortRelease'
+  #get 'sortTitle' => 'movies#sortTitle'
+  #get 'sortRelease' => 'movies#sortRelease'
   
   get  'auth/:provider/callback' => 'sessions#create'
   post 'logout' => 'sessions#destroy'
