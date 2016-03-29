@@ -4,9 +4,10 @@ class MoviesController < ApplicationController
     @movies = Movie.all
     #@movies.sort{ |a,b| a.title.downcase <=> b.title.downcase }
     #@movies = Movie.all.order(:title)
-    @all_ratings = ['G', 'PG', 'PG-13', 'NC-17', 'R']
-    
-    #@all_ratings = Movie.all_ratings
+    #@all_ratings = ['G', 'PG', 'PG-13', 'NC-17', 'R']
+   
+    @all_ratings = Movie.all_ratings
+    redirect = false
     
     if (params[:curr_sort] =="title")
       @movies = Movie.order_title
@@ -16,17 +17,25 @@ class MoviesController < ApplicationController
       @release_date_header = 'hilite'
     end
     
-=begin
+    #logger.debug(session.inspect)
+    #if (params[:ratings_] != "[]" )
+     #   @movies = Movie.order_title_ratings(params[:ratings_].keys.to_s)
+    #end
+    
+    puts 'hello'
+    puts params[:ratings].to_s
+    puts Movie.all.where(:title => 'Aladdin')
+    #byebug
     # Get the remembered settings
-    if (params[:filter] == nil and params[:ratings] == nil and params[:sort] == nil and 
-              (session[:filter] != nil or session[:ratings] != nil or session[:sort] != nil))
+    if (params[:filter] == nil and params[:ratings] == nil and params[:curr_sort] == nil and 
+              (session[:filter] != nil or session[:ratings] != nil or session[:curr_sort] != nil))
       if (params[:filter] == nil and session[:filter] != nil)
         params[:filter] = session[:filter]
       end
-      if (params[:sort] == nil and session[:sort] != nil)
-        params[:sort] = session[:sort]
+      if (params[:curr_sort] == nil and session[:curr_sort] != nil)
+        params[:curr_sort] = session[:curr_sort]
       end
-      redirect_to movies_path(:filter => params[:filter], :sort => params[:sort], :ratings => params[:ratings]) 
+      redirect_to movies_path(:filter => params[:filter], :curr_sort => params[:curr_sort], :ratings => params[:ratings]) 
     else
 
       if (params[:filter] != nil and params[:filter] != "[]")
@@ -36,31 +45,35 @@ class MoviesController < ApplicationController
         @filtered_ratings = params[:ratings] ? params[:ratings].keys : []
         session[:filter] = params[:ratings] ? params[:ratings].keys.to_s : nil
       end
-      
+#=begin    
       session[:sort] = params[:sort]
       session[:ratings] = params[:ratings]
-      if (params[:sort] == "title") # Sort by titles
+      if (params[:curr_sort] == "title") # Sort by titles
         if (params[:ratings] or params[:filter]) # filter ratings
-          @movies = Movie.find(:all, :conditions => {:rating => (@filtered_ratings==[] ? @all_ratings : @filtered_ratings)}, :order => "title")
+          @movies = Movie.all.where(:rating => (@filtered_ratings==[] ? @all_ratings : @filtered_ratings), :order => "title")
         else
-          @movies = Movie.find(:all, :order => "title")
+          #@movies = Movie.find(:all, :order => "title")
+          @movies=Movie.order_title
         end
-      elsif (params[:sort] == "release_date") # Sort by release_date
+      elsif (params[:curr_sort] == "release_date") # Sort by release_date
         if (params[:ratings] or params[:filter]) # filter ratings
-          @movies = Movie.find(:all, :conditions => {:rating => (@filtered_ratings==[] ? @all_ratings : @filtered_ratings)}, :order => "release_date")
+          @movies = Movie.all.where(:rating => (@filtered_ratings==[] ? @all_ratings : @filtered_ratings), :order => "release_date")
         else
-          @movies = Movie.find(:all, :order => "release_date")
+          #@movies = Movie.find(:all, :order => "release_date")
+          @movies = Movie.order_release
         end
-      elsif (params[:sort] == nil)
+      elsif (params[:curr_sort] == nil)
         if (params[:ratings] or params[:filter]) # filter ratings
-          @movies = Movie.find(:all, :conditions => {:rating => (@filtered_ratings==[] ? @all_ratings : @filtered_ratings)})
+          @movies = Movie.all.where(:rating => (@filtered_ratings==[] ? @all_ratings : @filtered_ratings))
         else
           @movies = Movie.all
         end
       end
+#=end      
+      
     end
     
-=end
+
     
   end
   
