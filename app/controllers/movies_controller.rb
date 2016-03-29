@@ -9,13 +9,7 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     redirect = false
     
-    if (params[:curr_sort] =="title")
-      @movies = Movie.order_title
-      @title_header = 'hilite'
-    elsif (params[:curr_sort] =="release_date")
-      @movies = Movie.order_release 
-      @release_date_header = 'hilite'
-    end
+    
     
     #logger.debug(session.inspect)
     #if (params[:ratings_] != "[]" )
@@ -26,7 +20,7 @@ class MoviesController < ApplicationController
     puts params[:ratings].to_s
     puts Movie.all.where(:title => 'Aladdin')
     #byebug
-    # Get the remembered settings
+    # Set empty params to the rating filter and sorting session 
     if (params[:filter] == nil and params[:ratings] == nil and params[:curr_sort] == nil and 
               (session[:filter] != nil or session[:ratings] != nil or session[:curr_sort] != nil))
       if (params[:filter] == nil and session[:filter] != nil)
@@ -45,31 +39,40 @@ class MoviesController < ApplicationController
         @filtered_ratings = params[:ratings] ? params[:ratings].keys : []
         session[:filter] = params[:ratings] ? params[:ratings].keys.to_s : nil
       end
-#=begin    
-      session[:sort] = params[:sort]
+   
+      session[:curr_sort] = params[:curr_sort]
       session[:ratings] = params[:ratings]
-      if (params[:curr_sort] == "title") # Sort by titles
-        if (params[:ratings] or params[:filter]) # filter ratings
-          @movies = Movie.all.where(:rating => (@filtered_ratings==[] ? @all_ratings : @filtered_ratings), :order => "title")
+
+      #sorting by title
+      if (params[:curr_sort] == "title") 
+         # apply current ratings
+        if (params[:ratings] or params[:filter])
+          @movies = Movie.order_title.where(:rating => (@filtered_ratings==[] ? @all_ratings : @filtered_ratings))
+          @title_header = 'hilite'
         else
-          #@movies = Movie.find(:all, :order => "title")
           @movies=Movie.order_title
+          @title_header = 'hilite'
         end
-      elsif (params[:curr_sort] == "release_date") # Sort by release_date
-        if (params[:ratings] or params[:filter]) # filter ratings
+        
+      ##sorting by release_date  
+      elsif (params[:curr_sort] == "release_date")
+       @release_date_header = 'hilite'
+        # apply current ratings
+        if (params[:ratings] or params[:filter]) 
           @movies = Movie.all.where(:rating => (@filtered_ratings==[] ? @all_ratings : @filtered_ratings), :order => "release_date")
+           @release_date_header = 'hilite'
         else
-          #@movies = Movie.find(:all, :order => "release_date")
           @movies = Movie.order_release
+          @release_date_header = 'hilite'
         end
       elsif (params[:curr_sort] == nil)
-        if (params[:ratings] or params[:filter]) # filter ratings
+      ##apply current ratings
+        if (params[:ratings] or params[:filter])
           @movies = Movie.all.where(:rating => (@filtered_ratings==[] ? @all_ratings : @filtered_ratings))
         else
           @movies = Movie.all
         end
       end
-#=end      
       
     end
     
