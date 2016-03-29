@@ -6,7 +6,7 @@
   Include:
   - @all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[#{rating}]", 1, ("checked" if @filtered_ratings.find_index(rating))
+    = check_box_tag "ratings[#{rating}]", 1, ("checked" if (@filtered_ratings.find_index(rating) or (params[:ratings] == nil and session[:ratings]==nil)))
   = submit_tag 'Refresh', :id => 'ratings_submit'
 %table#movies
   %thead
